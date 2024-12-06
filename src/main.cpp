@@ -52,11 +52,8 @@ void setup()
   pinMode(4,INPUT);
   pinMode(27,OUTPUT);
   Serial.begin(9600);
-  for (int i = 0; i < 10;i++){
-    tone(27,2000 * ((i&1) +1));
-    delay(300);
-  }
-  noTone(27);
+  tone(27,1000);
+  unsigned long sttime = millis();
   if (!bmp.begin())
   {
     Serial.println("Could not find a valid BMP085 sensor, check wiring!");
@@ -64,7 +61,9 @@ void setup()
     {
     }
   }
-    SD.begin(SD_CS);  
+  while (millis()-sttime < 300);
+  tone(27,1500);
+  SD.begin(SD_CS);  
   if(!SD.begin(SD_CS)) {
     Serial.println("Card Mount Failed");
     return;
@@ -92,6 +91,10 @@ void setup()
     Serial.println("File already exists");  
   }
   file.close();
+  delay(300);
+  tone(27,2000);
+  delay(600);
+  noTone(27);
 }
 
 void loop()
